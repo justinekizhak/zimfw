@@ -35,6 +35,8 @@ prompt_eriner_main() {
   local prompt_eriner_retval=${?}
   local prompt_eriner_color1=${1:-black}
   local prompt_eriner_color2=${2:-cyan}
+  local prompt_eriner_color3=${3:-red}
+  local prompt_eriner_color4=${4:-orange}
 
   ### Segment drawing
   # Utility functions to make it easy and re-usable to draw segmented prompts.
@@ -62,12 +64,16 @@ prompt_eriner_main() {
     print -n "%k%F{${prompt_eriner_bg}}%f "
   }
 
+  prompt_eriner_newline() {
+      print -n "\n%k%F{${prompt_eriner_color2}}%f "
+  }
   ### Prompt components
   # Each component will draw itself, or hide itself if no information needs to
   # be shown.
 
   # Status: Was there an error? Am I root? Are there background jobs? Ranger
   # spawned shell? Who and where am I (user@hostname)?
+
   prompt_eriner_status() {
     local segment=''
     (( prompt_eriner_retval )) && segment+=' %F{red}✘'
@@ -84,7 +90,7 @@ prompt_eriner_main() {
 
   # Pwd: current working directory.
   prompt_eriner_pwd() {
-    prompt_eriner_standout_segment ${prompt_eriner_color2} " $(short_pwd) "
+      prompt_eriner_standout_segment ${prompt_eriner_color2} " $(dirs -c; dirs) "
   }
 
   # Git: branch/detached head, dirty status.
@@ -96,10 +102,26 @@ prompt_eriner_main() {
     fi
   }
 
-  prompt_eriner_status
+  prompt_eriner_virtualenv () {
+      if [ "$VIRTUAL_ENV" != "" ]; then
+          prompt_eriner_standout_segment ${prompt_eriner_color3} " $(basename $VIRTUAL_ENV)"
+      fi
+  }
+
+  prompt_eriner_nowplaying () {
+      if [ "$(~/dotfiles/scripts/nowplaying)" != "" ]; then
+          prompt_eriner_standout_segment ${prompt_eriner_color4} "$(~/dotfiles/scripts/nowplaying)"
+      fi
+  }
+  # prompt_eriner_status
+  # echo " "
   prompt_eriner_pwd
   prompt_eriner_git
+  # prompt_eriner_standout_segment ${prompt_eriner_color2} " \uE0B1 ${${KEYMAP/vicmd/NORMAL}/(main|viins)/INSERT}"
+  prompt_eriner_virtualenv
+  prompt_eriner_nowplaying
   prompt_eriner_end
+  prompt_eriner_newline
 }
 
 prompt_eriner_precmd() {
