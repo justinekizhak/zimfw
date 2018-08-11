@@ -35,8 +35,8 @@ prompt_eriner_main() {
   local prompt_eriner_retval=${?}
   local prompt_eriner_color1=${1:-black}
   local prompt_eriner_color2=${2:-cyan}
-  local prompt_eriner_color3=${3:-red}
-  local prompt_eriner_color4=${4:-orange}
+  local prompt_eriner_color3=${3:-cyan}
+  local prompt_eriner_color4=${4:-grey}
 
   ### Segment drawing
   # Utility functions to make it easy and re-usable to draw segmented prompts.
