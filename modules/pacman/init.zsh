@@ -24,7 +24,7 @@ elif (( ! ${+commands[${zpacman_frontend}]} )); then
 You can fix this error by editing the 'zpacman_frontend' variable in your .zimrc" >&2
   zpacman_frontend='pacman'
   zpacman_frontend_priv='sudo pacman'
-elif [[ ${zpacman_frontend} == ("yaourt"|"pacaur"|"yay") ]]; then
+elif [[ ${zpacman_frontend} == ("yaourt"|"pacaur"|"yay"|"pikaur") ]]; then
   # those AUR helpers handle SUID themselves
   zpacman_frontend_priv="${zpacman_frontend}"
 else
@@ -126,7 +126,7 @@ alias pacblame="${zpacman_frontend} -Qo"
 #
 
 # source helper functions/aliases
-for helper in ${zpacman_helper[@]}; do
+for helper in ${zpacman_helper}; do
   if [[ -s ${0:h}/helper_${helper}.zsh ]]; then
     source ${0:h}/helper_${helper}.zsh
   else
